@@ -11,7 +11,7 @@ from data_model.schema import MonsterModel
 from machine_learning.model import Model
 
 API = FastAPI(
-    title="Data Science API",
+    title="MonsterLib API",
     version="0.0.1",
     docs_url="/",
     description="<h2>Full Description</h2>",
