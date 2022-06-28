@@ -3,16 +3,15 @@ import os.path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pandas import DataFrame
 
 from data_model.database import MongoDB
-from data_model.graphs import pie_chart
+from data_model.graphs import monsters_by_type
 from data_model.schema import MonsterModel
 from machine_learning.model import Model
 
 API = FastAPI(
     title="MonsterLib API",
-    version="0.0.1",
+    version="0.0.2",
     docs_url="/",
     description="<h2>Full Description</h2>",
 )
@@ -77,17 +76,7 @@ async def seed(amount: int):
 
 @API.get("/database/chart/count/type")
 async def chart_count_type():
-    df_type = DataFrame(API.mongo.connect().find(
-        filter={},
-        projection={"_id": False, "type": True},
-    ))
-    type_value_counts = df_type["type"].value_counts()
-    chart = pie_chart(
-        title="Monsters by Type",
-        labels=type_value_counts.index,
-        values=type_value_counts.values,
-    )
-    return json.loads(chart.to_json())
+    return json.loads(monsters_by_type(API.mongo.connect()).to_json())
 
 
 @API.delete("/database/delete")
